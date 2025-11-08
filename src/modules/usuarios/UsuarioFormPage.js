@@ -5,7 +5,7 @@ import MainLayout from '../../components/layout/MainLayout';
 import { Card, Button } from '../../components/common';
 import usuariosService from '../../services/usuariosService';
 import rolesService from '../../services/rolesService';
-import especialidadesService from '../../services/especialidadesService';
+import { getEspecialidades } from '../../services/especialidadesService';
 import styles from './UsuarioFormPage.module.css';
 
 const UsuarioFormPage = ({ usuarioId = null }) => {
@@ -73,7 +73,7 @@ const UsuarioFormPage = ({ usuarioId = null }) => {
     try {
       const [rolesRes, especialidadesRes] = await Promise.all([
         rolesService.getAll(),
-        especialidadesService.getAll()
+        getEspecialidades({ page: 1, limit: 100 })
       ]);
       
       console.log('📦 Respuesta de roles:', rolesRes);
@@ -96,7 +96,7 @@ const UsuarioFormPage = ({ usuarioId = null }) => {
       setRoles(rolesData);
       
       // Especialidades: API real devuelve data.data.data
-      const especialidadesData = especialidadesRes.data.data.data || especialidadesRes.data.data || [];
+      const especialidadesData = especialidadesRes.data || [];
       setEspecialidades(especialidadesData);
     } catch (error) {
       console.error('Error al cargar datos iniciales:', error);
